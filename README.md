@@ -1,8 +1,7 @@
 # appearance
 
-[![Lint](https://github.com/iLLeniumStudios/illenium-appearance/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/iLLeniumStudios/illenium-appearance/actions/workflows/lint.yml)
+Just Illenium Appearance but can be renamed to whatever you want
 
-A replacement for clothing resources for various frameworks
 
 
 ## Credits
