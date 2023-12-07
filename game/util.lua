@@ -20,9 +20,9 @@ local function computePedModelsByHash()
     end
 end
 
-
-
-
+---@param ped number entity id
+---@return string
+--- Get the model name from an entity's model hash
 local function getPedModel(ped)
     if not hashesComputed then
         computePedModelsByHash()
@@ -31,8 +31,8 @@ local function getPedModel(ped)
     return pedModelsByHash[GetEntityModel(ped)]
 end
 
-
-
+---@param ped number entity id
+---@return table<number, table<string, number>>
 local function getPedComponents(ped)
     local size = #constants.PED_COMPONENTS_IDS
     local components = table.create(size, 0)
@@ -49,8 +49,8 @@ local function getPedComponents(ped)
     return components
 end
 
-
-
+---@param ped number entity id
+---@return table<number, table<string, number>>
 local function getPedProps(ped)
     local size = #constants.PED_PROPS_IDS
     local props = table.create(size, 0)
@@ -70,19 +70,19 @@ local function round(number, decimalPlaces)
     return tonumber(string.format("%." .. (decimalPlaces or 0) .. "f", number))
 end
 
-
-
-
-
-
+---@param ped number entity id
+---@return table <number, number>
+---```
+---{ shapeFirst, shapeSecond, shapeThird, skinFirst, skinSecond, skinThird, shapeMix, skinMix, thirdMix }
+---```
 local function getPedHeadBlend(ped)
+    -- GET_PED_HEAD_BLEND_DATA
     local shapeFirst, shapeSecond, shapeThird, skinFirst, skinSecond, skinThird, shapeMix, skinMix, thirdMix = Citizen
-        .InvokeNative(0x2746BD9D88C5C5D0, ped, Citizen.PointerValueIntInitialized(0),
-            Citizen.PointerValueIntInitialized(0),
-            Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0),
-            Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0),
-            Citizen.PointerValueFloatInitialized(0), Citizen.PointerValueFloatInitialized(0),
-            Citizen.PointerValueFloatInitialized(0))
+    .InvokeNative(0x2746BD9D88C5C5D0, ped, Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0),
+        Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0),
+        Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0),
+        Citizen.PointerValueFloatInitialized(0), Citizen.PointerValueFloatInitialized(0),
+        Citizen.PointerValueFloatInitialized(0))
 
     shapeMix = tonumber(string.sub(shapeMix, 0, 4))
     if shapeMix > 1 then shapeMix = 1 end
@@ -110,8 +110,8 @@ local function getPedHeadBlend(ped)
     }
 end
 
-
-
+---@param ped number entity id
+---@return table<number, table<string, number>>
 local function getPedFaceFeatures(ped)
     local size = #constants.FACE_FEATURES
     local faceFeatures = table.create(0, size)
@@ -124,8 +124,8 @@ local function getPedFaceFeatures(ped)
     return faceFeatures
 end
 
-
-
+---@param ped number entity id
+---@return table<number, table<string, number>>
 local function getPedHeadOverlays(ped)
     local size = #constants.HEAD_OVERLAYS
     local headOverlays = table.create(0, size)
@@ -147,8 +147,8 @@ local function getPedHeadOverlays(ped)
     return headOverlays
 end
 
-
-
+---@param ped number entity id
+---@return table<string, number>
 local function getPedHair(ped)
     return {
         style = GetPedDrawableVariation(ped, 2),
@@ -390,6 +390,8 @@ local function setPlayerAppearance(appearance)
         setPedAppearance(cache.ped, appearance)
     end
 end
+
+
 local angleY, angleZ, cam, running, gEntity, gRadius, gRadiusMax, gRadiusMin, gHeight, gHeightMax, scrollIncrements, mouse =
     0.0, 0.0, nil, false, nil, nil, nil, nil, 0.0, 1.0, nil, false
 
