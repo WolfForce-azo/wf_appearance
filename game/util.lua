@@ -392,7 +392,6 @@ local function setPlayerAppearance(appearance)
     end
 end
 
-
 local angleY, angleZ, cam, running, gEntity, gRadius, gRadiusMax, gRadiusMin, gHeight, gHeightMax, scrollIncrements, mouse =
     0.0, 0.0, nil, false, nil, nil, nil, nil, 0.0, 1.0, nil, false
 
@@ -462,7 +461,8 @@ local function getSpotlight()
     while isSpotlightActive do
         lib.disableControls()
         local coords = GetEntityCoords(cache.ped)
-        DrawSpotLight(coords.x, coords.y, coords.z + 3.0, 0.0, 0.0, -90.0, 255, 255, 255, 100.0, 10.0, 10.0, 10.0, 10.0)
+        local forward = GetEntityForwardVector(cache.ped)
+        DrawSpotLight(coords.x + forward.x, coords.y+ forward.y, coords.z + 3.0, 0.0, 90.0, -180.0, 255, 255, 255, 5.0, 1.0, 1.0, 100.0, 1.0)
         Wait(0)
     end
 end
@@ -481,8 +481,6 @@ end
 local function lightStatus()
     return isSpotlightActive
 end
-
-
 
 local animations = {
     { Animation = 'try_trousers_neutral_a', Dictionary = 'mp_clothing@female@trousers' },
@@ -565,6 +563,7 @@ local function inputListener()
         end
     end)
 end
+
 local function isDragActive()
     return running
 end
@@ -602,7 +601,6 @@ local function stopDragCam()
     lib.hideTextUI()
 end
 
-
 exports('startDragCam', startDragCam)
 exports('stopDragCam', stopDragCam)
 exports("getPedModel", getPedModel)
@@ -613,7 +611,6 @@ exports("getPedFaceFeatures", getPedFaceFeatures)
 exports("getPedHeadOverlays", getPedHeadOverlays)
 exports("getPedHair", getPedHair)
 exports("getPedAppearance", getPedAppearance)
-
 exports("setPlayerModel", setPlayerModel)
 exports("setPedHeadBlend", setPedHeadBlend)
 exports("setPedFaceFeatures", setPedFaceFeatures)
@@ -654,7 +651,7 @@ client = {
     getPedProps = getPedProps,
     startDragCam = startDragCam,
     stopDragCam = stopDragCam,
-    toggleSpotlight = toggleSpotlight,
     isDragActive = isDragActive,
+    toggleSpotlight = toggleSpotlight,
     lightStatus = lightStatus,
 }
