@@ -1,5 +1,4 @@
 local client = client
-
 RegisterNUICallback("appearance_get_locales", function(_, cb)
     cb(Locales[GetConvar("illenium-appearance:locale", "en")].UI)
 end)
@@ -19,12 +18,16 @@ end)
 
 RegisterNUICallback("appearance_set_camera", function(camera, cb)
     cb(1)
+    if client.isDragActive() then
+        client.stopDragCam()
+    end
     client.setCamera(camera)
 end)
 
 RegisterNUICallback("appearance_turn_around", function(_, cb)
     cb(1)
-    client.pedTurn(cache.ped, 180.0)
+    SetNuiFocus(false, false)
+    client.startDragCam(cache.ped, radiusOptions == { initial = 2.0, min = 0.35, max = 2.0, scrollIncrements = 0.1 })
 end)
 
 RegisterNUICallback("appearance_rotate_camera", function(direction, cb)
@@ -81,7 +84,8 @@ RegisterNUICallback("appearance_change_eye_color", function(eyeColor, cb)
 end)
 
 RegisterNUICallback("appearance_apply_tattoo", function(data, cb)
-    local paid = not data.tattoo or not Config.ChargePerTattoo or lib.callback.await("illenium-appearance:server:payForTattoo", false, data.tattoo)
+    local paid = not data.tattoo or not Config.ChargePerTattoo or
+    lib.callback.await("illenium-appearance:server:payForTattoo", false, data.tattoo)
     if paid then
         client.addPedTattoo(cache.ped, data.updatedTattoos or data)
     end
@@ -114,20 +118,40 @@ RegisterNUICallback("appearance_save", function(appearance, cb)
     client.wearClothes(appearance, "body")
     client.wearClothes(appearance, "bottom")
     client.exitPlayerCustomization(appearance)
+    lib.hideTextUI()
+    if client.isDragActive() then
+        client.stopDragCam()
+        if client.lightStatus() then
+            client.toggleSpotlight()
+        end
+    end
 end)
 
 RegisterNUICallback("appearance_exit", function(_, cb)
     cb(1)
     client.exitPlayerCustomization()
+    lib.hideTextUI()
+    if client.isDragActive() then
+        client.stopDragCam()
+        if client.lightStatus() then
+            client.toggleSpotlight()
+        end
+    end
 end)
 
 RegisterNUICallback("rotate_left", function(_, cb)
     cb(1)
+    if client.isDragActive() then
+        client.stopDragCam()
+    end
     client.pedTurn(cache.ped, 10.0)
 end)
 
 RegisterNUICallback("rotate_right", function(_, cb)
     cb(1)
+    if client.isDragActive() then
+        client.stopDragCam()
+    end
     client.pedTurn(cache.ped, -10.0)
 end)
 

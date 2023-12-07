@@ -20,9 +20,9 @@ local function computePedModelsByHash()
     end
 end
 
----@param ped number entity id
----@return string
---- Get the model name from an entity's model hash
+
+
+
 local function getPedModel(ped)
     if not hashesComputed then
         computePedModelsByHash()
@@ -31,8 +31,8 @@ local function getPedModel(ped)
     return pedModelsByHash[GetEntityModel(ped)]
 end
 
----@param ped number entity id
----@return table<number, table<string, number>>
+
+
 local function getPedComponents(ped)
     local size = #constants.PED_COMPONENTS_IDS
     local components = table.create(size, 0)
@@ -49,8 +49,8 @@ local function getPedComponents(ped)
     return components
 end
 
----@param ped number entity id
----@return table<number, table<string, number>>
+
+
 local function getPedProps(ped)
     local size = #constants.PED_PROPS_IDS
     local props = table.create(size, 0)
@@ -70,14 +70,19 @@ local function round(number, decimalPlaces)
     return tonumber(string.format("%." .. (decimalPlaces or 0) .. "f", number))
 end
 
----@param ped number entity id
----@return table <number, number>
----```
----{ shapeFirst, shapeSecond, shapeThird, skinFirst, skinSecond, skinThird, shapeMix, skinMix, thirdMix }
----```
+
+
+
+
+
 local function getPedHeadBlend(ped)
-    -- GET_PED_HEAD_BLEND_DATA
-    local shapeFirst, shapeSecond, shapeThird, skinFirst, skinSecond, skinThird, shapeMix, skinMix, thirdMix = Citizen.InvokeNative(0x2746BD9D88C5C5D0, ped, Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0), Citizen.PointerValueFloatInitialized(0), Citizen.PointerValueFloatInitialized(0), Citizen.PointerValueFloatInitialized(0))
+    local shapeFirst, shapeSecond, shapeThird, skinFirst, skinSecond, skinThird, shapeMix, skinMix, thirdMix = Citizen
+        .InvokeNative(0x2746BD9D88C5C5D0, ped, Citizen.PointerValueIntInitialized(0),
+            Citizen.PointerValueIntInitialized(0),
+            Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0),
+            Citizen.PointerValueIntInitialized(0), Citizen.PointerValueIntInitialized(0),
+            Citizen.PointerValueFloatInitialized(0), Citizen.PointerValueFloatInitialized(0),
+            Citizen.PointerValueFloatInitialized(0))
 
     shapeMix = tonumber(string.sub(shapeMix, 0, 4))
     if shapeMix > 1 then shapeMix = 1 end
@@ -105,29 +110,29 @@ local function getPedHeadBlend(ped)
     }
 end
 
----@param ped number entity id
----@return table<number, table<string, number>>
+
+
 local function getPedFaceFeatures(ped)
     local size = #constants.FACE_FEATURES
     local faceFeatures = table.create(0, size)
 
     for i = 1, size do
         local feature = constants.FACE_FEATURES[i]
-        faceFeatures[feature] = round(GetPedFaceFeature(ped, i-1), 1)
+        faceFeatures[feature] = round(GetPedFaceFeature(ped, i - 1), 1)
     end
 
     return faceFeatures
 end
 
----@param ped number entity id
----@return table<number, table<string, number>>
+
+
 local function getPedHeadOverlays(ped)
     local size = #constants.HEAD_OVERLAYS
     local headOverlays = table.create(0, size)
 
     for i = 1, size do
         local overlay = constants.HEAD_OVERLAYS[i]
-        local _, value, _, firstColor, secondColor, opacity = GetPedHeadOverlayData(ped, i-1)
+        local _, value, _, firstColor, secondColor, opacity = GetPedHeadOverlayData(ped, i - 1)
 
         if value ~= 255 then
             opacity = round(opacity, 1)
@@ -136,14 +141,14 @@ local function getPedHeadOverlays(ped)
             opacity = 0
         end
 
-        headOverlays[overlay] = {style = value, opacity = opacity, color = firstColor, secondColor = secondColor}
+        headOverlays[overlay] = { style = value, opacity = opacity, color = firstColor, secondColor = secondColor }
     end
 
     return headOverlays
 end
 
----@param ped number entity id
----@return table<string, number>
+
+
 local function getPedHair(ped)
     return {
         style = GetPedDrawableVariation(ped, 2),
@@ -185,7 +190,6 @@ local function getPedAppearance(ped)
 end
 
 local function setPlayerModel(model)
-
     if type(model) == "string" then model = joaat(model) end
 
     if IsModelInCdimage(model) then
@@ -210,14 +214,16 @@ end
 
 local function setPedHeadBlend(ped, headBlend)
     if headBlend and isPedFreemodeModel(ped) then
-        SetPedHeadBlendData(ped, headBlend.shapeFirst, headBlend.shapeSecond, headBlend.shapeThird, headBlend.skinFirst, headBlend.skinSecond, headBlend.skinThird, tofloat(headBlend.shapeMix or 0), tofloat(headBlend.skinMix or 0), tofloat(headBlend.thirdMix or 0), false)
+        SetPedHeadBlendData(ped, headBlend.shapeFirst, headBlend.shapeSecond, headBlend.shapeThird, headBlend.skinFirst,
+            headBlend.skinSecond, headBlend.skinThird, tofloat(headBlend.shapeMix or 0), tofloat(headBlend.skinMix or 0),
+            tofloat(headBlend.thirdMix or 0), false)
     end
 end
 
 local function setPedFaceFeatures(ped, faceFeatures)
     if faceFeatures then
         for k, v in pairs(constants.FACE_FEATURES) do
-            SetPedFaceFeature(ped, k-1, tofloat(faceFeatures[v]))
+            SetPedFaceFeature(ped, k - 1, tofloat(faceFeatures[v]))
         end
     end
 end
@@ -226,7 +232,7 @@ local function setPedHeadOverlays(ped, headOverlays)
     if headOverlays then
         for k, v in pairs(constants.HEAD_OVERLAYS) do
             local headOverlay = headOverlays[v]
-            SetPedHeadOverlay(ped, k-1, headOverlay.style, tofloat(headOverlay.opacity))
+            SetPedHeadOverlay(ped, k - 1, headOverlay.style, tofloat(headOverlay.opacity))
 
             if headOverlay.color then
                 local colorType = 1
@@ -234,7 +240,7 @@ local function setPedHeadOverlays(ped, headOverlays)
                     colorType = 2
                 end
 
-                SetPedHeadOverlayColor(ped, k-1, colorType, headOverlay.color, headOverlay.secondColor)
+                SetPedHeadOverlayColor(ped, k - 1, colorType, headOverlay.color, headOverlay.secondColor)
             end
         end
     end
@@ -244,7 +250,7 @@ local function applyAutomaticFade(ped, style)
     local gender = getPedDecorationType()
     local hairDecoration = constants.HAIR_DECORATIONS[gender][style]
 
-    if(hairDecoration) then
+    if (hairDecoration) then
         AddPedDecorationFromHashes(ped, hairDecoration[1], hairDecoration[2])
     end
 end
@@ -384,7 +390,219 @@ local function setPlayerAppearance(appearance)
         setPedAppearance(cache.ped, appearance)
     end
 end
+local angleY, angleZ, cam, running, gEntity, gRadius, gRadiusMax, gRadiusMin, gHeight, gHeightMax, scrollIncrements, mouse =
+    0.0, 0.0, nil, false, nil, nil, nil, nil, 0.0, 1.0, nil, false
 
+local function cos(degrees)
+    return math.cos(math.rad(degrees))
+end
+
+local function sin(degrees)
+    return math.sin(math.rad(degrees))
+end
+
+local function setCamPosition()
+    local entityCoords = GetEntityCoords(cache.ped)
+    local mouseX = GetDisabledControlNormal(0, 1) * 8.0
+    local mouseY = GetDisabledControlNormal(0, 2) * 8.0
+
+    angleZ = angleZ - mouseX
+    angleY = math.clamp(angleY + mouseY, -89.0, 89.0)
+
+    local cosAngleZ, cosAngleY, sinAngleZ, sinAngleY = cos(angleZ), cos(angleY), sin(angleZ), sin(angleY)
+
+    local offset = vec3(
+        ((cosAngleZ * cosAngleY) + (cosAngleY * cosAngleZ)) / 2 * gRadius,
+        ((sinAngleZ * cosAngleY) + (cosAngleY * sinAngleZ)) / 2 * gRadius,
+        sinAngleY * gRadius
+    )
+
+    local camPos = vec3(entityCoords.x + offset.x, entityCoords.y + offset.y, entityCoords.z + offset.z + gHeight)
+    SetCamCoord(cam, camPos.x, camPos.y, camPos.z)
+    PointCamAtCoord(cam, entityCoords.x, entityCoords.y, entityCoords.z + gHeight)
+end
+
+local function rotateCam()
+    while running do
+        setCamPosition()
+        SetMouseCursorActiveThisFrame()
+        if IsDisabledControlJustReleased(0, 24) then
+            SetMouseCursorSprite(3)
+            return
+        end
+
+        Wait(0)
+    end
+end
+
+local function rotatePed()
+    local previousHeading = GetEntityHeading(cache.ped)
+    local heading = previousHeading
+    local rotationSpeed = 2.0
+    while running do
+        SetMouseCursorActiveThisFrame()
+        local mouseX = GetDisabledControlNormal(0, 1) * 8.0
+        heading = heading - mouseX * rotationSpeed
+        SetEntityHeading(cache.ped, heading)
+        if IsDisabledControlReleased(0, 25) then
+            SetMouseCursorSprite(3)
+            return
+        end
+        Wait(0)
+    end
+end
+
+local isSpotlightActive = false
+local function getSpotlight()
+    while isSpotlightActive do
+        local coords = GetEntityCoords(cache.ped)
+        DrawSpotLight(coords.x, coords.y, coords.z + 3.0, 0.0, 0.0, -90.0, 255, 255, 255, 100.0, 10.0, 10.0, 10.0, 10.0)
+        Wait(0)
+    end
+end
+
+local function toggleSpotlight()
+    if not isSpotlightActive then
+        isSpotlightActive = true
+        CreateThread(getSpotlight)
+        return
+    else
+        isSpotlightActive = false
+        return
+    end
+end
+
+local function lightStatus()
+    return isSpotlightActive
+end
+
+
+
+local animations = {
+    { Animation = 'try_trousers_neutral_a', Dictionary = 'mp_clothing@female@trousers' },
+    { Animation = 'bind_pose_180',          Dictionary = 'mp_sleep' },
+    { Animation = 'handsup_base',           Dictionary = 'missminuteman_1ig_2' },
+    { Animation = 'cancel',                 Dictionary = 'cancel' }
+}
+
+local currentAnimationIndex = 1
+
+local function inputListener()
+    setCamPosition()
+    CreateThread(function()
+        while running do
+            lib.disableControls()
+            if mouse then
+                SetMouseCursorActiveThisFrame()
+                SetMouseCursorSprite(3)
+            end
+
+            if IsDisabledControlJustPressed(0, 24) then -- Left Click rotate camera
+                SetMouseCursorSprite(4)
+                rotateCam()
+            end
+
+            if IsDisabledControlJustPressed(0, 25) then -- Right Click rotate entity
+                SetMouseCursorSprite(4)
+                rotatePed()
+            end
+
+            if IsDisabledControlJustReleased(0, 14) then -- Mouse Zoom In
+                if gRadius + scrollIncrements <= gRadiusMax then
+                    gRadius = gRadius + scrollIncrements
+                    setCamPosition()
+                end
+            elseif IsDisabledControlJustReleased(0, 15) then -- Mouse Zoom Out
+                if gRadius - scrollIncrements >= gRadiusMin then
+                    gRadius = gRadius - scrollIncrements
+                    setCamPosition()
+                end
+            end
+
+            if IsDisabledControlPressed(0, 32) then -- W Camera Pan Up
+                if gHeight + 0.1 <= gHeightMax then
+                    gHeight = math.min(gHeight + 0.01, gHeightMax)
+                    setCamPosition()
+                end
+            elseif IsDisabledControlPressed(0, 33) then -- S Camera Pan Down
+                if gHeight - 0.1 >= -gHeightMax then
+                    gHeight = math.max(gHeight - 0.01, -gHeightMax)
+                    setCamPosition()
+                end
+            end
+
+            if IsDisabledControlJustPressed(0, 38) then -- E Play Animations
+                local animation = animations[currentAnimationIndex]
+                if animation.Dictionary ~= 'cancel' then
+                    lib.requestAnimDict(animation.Dictionary, 1500)
+                    TaskPlayAnim(cache.ped, animation.Dictionary, animation.Animation, 8.0, 8.0, -1, 1, 0, false, false,
+                        false)
+                    currentAnimationIndex = currentAnimationIndex % #animations + 1
+                else
+                    ClearPedTasksImmediately(cache.ped)
+                    currentAnimationIndex = currentAnimationIndex % #animations + 1
+                end
+            end
+
+            if IsDisabledControlJustReleased(0, 44) then -- 'Q' Spotlight
+                toggleSpotlight()
+            end
+
+            if IsDisabledControlJustPressed(0, 202) or IsDisabledControlJustPressed(0, 322) then -- ESC or Backspace Close Menu
+                SetNuiFocus(true, true)
+                SetMouseCursorSprite(0)
+                lib.hideTextUI()
+                mouse = false
+            end
+
+            Wait(0)
+        end
+    end)
+end
+local function isDragActive()
+    return running
+end
+
+local function startDragCam(entity, radiusOptions)
+    if isDragActive() then
+        mouse = true
+        return
+    end
+    mouse, running, gEntity, gRadius, gRadiusMin, gRadiusMax, scrollIncrements, cam = true,
+        true, entity,
+        radiusOptions?.initial or 2.0, radiusOptions?.min or 0.35, radiusOptions?.max or 2.0,
+        radiusOptions?.scrollIncrements or 0.1, CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
+    SetCamUseShallowDofMode(Cam, true)
+    SetCamDofStrength(Cam, 0.5)
+    SetCamActive(cam, true)
+    RenderScriptCams(true, true, 1, true, false)
+    SetTimecycleModifier('hud_def_blur')
+    SetTimecycleModifierStrength(0.1)
+    lib.showTextUI(
+        "[Mouse Wheel ↑  ↓ ]  Zoom In / Out  \n" ..
+        "[L/R Click]  Drag Cam / Char  \n" ..
+        "[Q]  Spotlight  \n" ..
+        "[W/S] Cam Height  \n" ..
+        "[E]  Pose  \n" ..
+        "[ESC] Close Cam UI"
+    )
+    lib.disableControls:Add(1, 2, 3, 4, 5, 6, 8, 9, 12, 13, 21, 24, 25, 30, 31, 32, 33, 36, 38, 44, 47, 58, 69, 75, 140,
+        141, 142, 143, 200, 202, 257, 263, 264, 322)
+    inputListener()
+end
+
+local function stopDragCam()
+    mouse, running = false, false
+    SetTimecycleModifier('default')
+    SetCamActive(cam, false)
+    DestroyCam(cam, true)
+    RenderScriptCams(false, true, 0, true, false)
+    lib.hideTextUI()
+end
+
+
+exports('startDragCam', startDragCam)
+exports('stopDragCam', stopDragCam)
 exports("getPedModel", getPedModel)
 exports("getPedComponents", getPedComponents)
 exports("getPedProps", getPedProps)
@@ -431,5 +649,10 @@ client = {
     setPedComponents = setPedComponents,
     setPedProps = setPedProps,
     getPedComponents = getPedComponents,
-    getPedProps = getPedProps
+    getPedProps = getPedProps,
+    startDragCam = startDragCam,
+    stopDragCam = stopDragCam,
+    toggleSpotlight = toggleSpotlight,
+    isDragActive = isDragActive,
+    lightStatus = lightStatus,
 }
