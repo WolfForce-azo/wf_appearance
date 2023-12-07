@@ -404,7 +404,7 @@ local function sin(degrees)
 end
 
 local function setCamPosition()
-    local entityCoords = GetEntityCoords(cache.ped)
+    local entityCoords = GetEntityCoords(gEntity)
     local mouseX = GetDisabledControlNormal(0, 1) * 8.0
     local mouseY = GetDisabledControlNormal(0, 2) * 8.0
 
@@ -426,9 +426,9 @@ end
 
 local function rotateCam()
     while running do
+        SetMouseCursorActiveThisFrame()
         lib.disableControls()
         setCamPosition()
-        SetMouseCursorActiveThisFrame()
         if IsDisabledControlJustReleased(0, 24) then
             SetMouseCursorSprite(3)
             return
@@ -443,8 +443,8 @@ local function rotatePed()
     local heading = previousHeading
     local rotationSpeed = 2.0
     while running do
-        lib.disableControls()
         SetMouseCursorActiveThisFrame()
+        lib.disableControls()
         local mouseX = GetDisabledControlNormal(0, 1) * 8.0
         heading = heading - mouseX * rotationSpeed
         SetEntityHeading(cache.ped, heading)
@@ -481,6 +481,8 @@ end
 local function lightStatus()
     return isSpotlightActive
 end
+
+
 
 local animations = {
     { Animation = 'try_trousers_neutral_a', Dictionary = 'mp_clothing@female@trousers' },
@@ -554,7 +556,6 @@ local function inputListener()
 
             if IsDisabledControlJustPressed(0, 202) or IsDisabledControlJustPressed(0, 322) then -- ESC or Backspace Close Menu
                 SetNuiFocus(true, true)
-                SetMouseCursorSprite(0)
                 lib.hideTextUI()
                 mouse = false
             end
@@ -562,6 +563,10 @@ local function inputListener()
             Wait(0)
         end
     end)
+end
+
+local function getMouse()
+    mouse = true
 end
 
 local function isDragActive()
@@ -594,12 +599,13 @@ local function startDragCam(entity, radiusOptions)
 end
 
 local function stopDragCam()
-    mouse, running = false, false
+    mouse, running, isSpotlightActive, cam = false, false, false, nil
     SetCamActive(cam, false)
     DestroyCam(cam, true)
     RenderScriptCams(false, true, 0, true, false)
     lib.hideTextUI()
 end
+
 
 exports('startDragCam', startDragCam)
 exports('stopDragCam', stopDragCam)
@@ -611,6 +617,7 @@ exports("getPedFaceFeatures", getPedFaceFeatures)
 exports("getPedHeadOverlays", getPedHeadOverlays)
 exports("getPedHair", getPedHair)
 exports("getPedAppearance", getPedAppearance)
+
 exports("setPlayerModel", setPlayerModel)
 exports("setPedHeadBlend", setPedHeadBlend)
 exports("setPedFaceFeatures", setPedFaceFeatures)
@@ -651,7 +658,8 @@ client = {
     getPedProps = getPedProps,
     startDragCam = startDragCam,
     stopDragCam = stopDragCam,
-    isDragActive = isDragActive,
     toggleSpotlight = toggleSpotlight,
+    isDragActive = isDragActive,
     lightStatus = lightStatus,
+    getMouse = getMouse
 }
