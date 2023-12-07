@@ -18,21 +18,33 @@ end)
 
 RegisterNUICallback("appearance_set_camera", function(camera, cb)
     cb(1)
-    if client.isDragActive() then
-        client.stopDragCam()
+    if not client.isDragActive() then
+        client.setCamera(camera)
+    else
+        SetNuiFocus(false, false)
+        client.getMouse()
     end
-    client.setCamera(camera)
 end)
 
 RegisterNUICallback("appearance_turn_around", function(_, cb)
     cb(1)
-    SetNuiFocus(false, false)
-    client.startDragCam(cache.ped, radiusOptions == { initial = 2.0, min = 0.35, max = 2.0, scrollIncrements = 0.1 })
+    if not client.isDragActive() then
+        SetNuiFocus(false, false)
+        client.startDragCam(cache.ped, radiusOptions == { initial = 2.0, min = 0.35, max = 2.0, scrollIncrements = 0.1 })
+    else
+        SetNuiFocus(false, false)
+        client.getMouse()
+    end
 end)
 
 RegisterNUICallback("appearance_rotate_camera", function(direction, cb)
     cb(1)
-    client.rotateCamera(direction)
+    if not client.isDragActive() then
+        client.rotateCamera(direction)
+    else
+        SetNuiFocus(false, false)
+        client.getMouse()
+    end
 end)
 
 RegisterNUICallback("appearance_change_model", function(model, cb)
@@ -85,7 +97,7 @@ end)
 
 RegisterNUICallback("appearance_apply_tattoo", function(data, cb)
     local paid = not data.tattoo or not Config.ChargePerTattoo or
-    lib.callback.await("illenium-appearance:server:payForTattoo", false, data.tattoo)
+        lib.callback.await("illenium-appearance:server:payForTattoo", false, data.tattoo)
     if paid then
         client.addPedTattoo(cache.ped, data.updatedTattoos or data)
     end
@@ -119,7 +131,9 @@ RegisterNUICallback("appearance_save", function(appearance, cb)
     client.wearClothes(appearance, "bottom")
     client.exitPlayerCustomization(appearance)
     lib.hideTextUI()
-    if client.isDragActive() then
+    if not client.isDragActive() then
+        return
+    else
         client.stopDragCam()
         if client.lightStatus() then
             client.toggleSpotlight()
@@ -131,7 +145,9 @@ RegisterNUICallback("appearance_exit", function(_, cb)
     cb(1)
     client.exitPlayerCustomization()
     lib.hideTextUI()
-    if client.isDragActive() then
+    if not client.isDragActive() then
+        return
+    else
         client.stopDragCam()
         if client.lightStatus() then
             client.toggleSpotlight()
@@ -141,18 +157,22 @@ end)
 
 RegisterNUICallback("rotate_left", function(_, cb)
     cb(1)
-    if client.isDragActive() then
-        client.stopDragCam()
+    if not client.isDragActive() then
+        client.pedTurn(cache.ped, 10.0)
+    else
+        SetNuiFocus(false, false)
+        client.getMouse()
     end
-    client.pedTurn(cache.ped, 10.0)
 end)
 
 RegisterNUICallback("rotate_right", function(_, cb)
     cb(1)
-    if client.isDragActive() then
-        client.stopDragCam()
+    if not client.isDragActive() then
+        client.pedTurn(cache.ped, -10.0)
+    else
+        SetNuiFocus(false, false)
+        client.getMouse()
     end
-    client.pedTurn(cache.ped, -10.0)
 end)
 
 RegisterNUICallback("get_theme_configuration", function(_, cb)
