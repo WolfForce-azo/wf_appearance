@@ -404,7 +404,7 @@ local function sin(degrees)
 end
 
 local function setCamPosition()
-    local entityCoords = GetEntityCoords(gEntity)
+    local entityCoords = GetEntityCoords(cache.ped)
     local mouseX = GetDisabledControlNormal(0, 1) * 8.0
     local mouseY = GetDisabledControlNormal(0, 2) * 8.0
 
