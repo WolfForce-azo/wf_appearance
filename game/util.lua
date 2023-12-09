@@ -462,7 +462,7 @@ local function getSpotlight()
         lib.disableControls()
         local coords = GetEntityCoords(cache.ped)
         local forward = GetEntityForwardVector(cache.ped)
-        DrawSpotLight(coords.x + forward.x, coords.y+ forward.y, coords.z + 3.0, 0.0, 90.0, -180.0, 255, 255, 255, 5.0, 1.0, 1.0, 100.0, 1.0)
+        DrawSpotLight(coords.x + forward.x, coords.y + forward.y, coords.z + 3.0, 0.0, 90.0, -180.0, 255, 255, 255, 5.0, 1.0, 1.0, 100.0, 1.0)
         Wait(0)
     end
 end
@@ -481,8 +481,6 @@ end
 local function lightStatus()
     return isSpotlightActive
 end
-
-
 
 local animations = {
     { Animation = 'try_trousers_neutral_a', Dictionary = 'mp_clothing@female@trousers' },
@@ -578,13 +576,14 @@ local function startDragCam(entity, radiusOptions)
         mouse = true
         return
     end
-    mouse, running, gEntity, gRadius, gRadiusMin, gRadiusMax, scrollIncrements, cam = true,
-        true, entity,
+    mouse, running, gEntity, gRadius, gRadiusMin, gRadiusMax, scrollIncrements, cam = true, true, entity,
         radiusOptions?.initial or 2.0, radiusOptions?.min or 0.35, radiusOptions?.max or 2.0,
-        radiusOptions?.scrollIncrements or 0.1, CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-
+        radiusOptions?.scrollIncrements or 0.15, CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
     SetCamActive(cam, true)
     RenderScriptCams(true, true, 1, true, false)
+    angleZ = (GetEntityHeading(entity) + 90)
+    angleY = 0.0
+
     lib.showTextUI(
         "[Mouse Wheel ↑  ↓ ]  Zoom In / Out  \n" ..
         "[L/R Click]  Drag Cam / Char  \n" ..
@@ -597,6 +596,7 @@ local function startDragCam(entity, radiusOptions)
         141, 142, 143, 200, 202, 257, 263, 264, 322)
     inputListener()
 end
+
 
 local function stopDragCam()
     mouse, running, isSpotlightActive, cam = false, false, false, nil
