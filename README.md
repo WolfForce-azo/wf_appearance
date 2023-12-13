@@ -25,10 +25,6 @@ FiveM [qb-core](https://github.com/qbcore-framework/qb-core) or [esx](https://gi
 
 3. Enjoy.
 
-## Troubleshooting & Support
-[Mustache Scripts - Discord](https://discord.gg/RVx8nVwcEG)
-
-
 ## Tip / Commission Me
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A46AZW4)
 
