@@ -48,6 +48,12 @@ RegisterNUICallback("appearance_rotate_camera", function(direction, cb)
 end)
 
 RegisterNUICallback("appearance_change_model", function(model, cb)
+    if client.isDragActive() then
+        client.stopDragCam()
+        if client.lightStatus() then
+            client.toggleSpotlight()
+        end
+    end
     local playerPed = client.setPlayerModel(model)
 
     SetEntityHeading(cache.ped, client.getHeading())
