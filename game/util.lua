@@ -482,13 +482,6 @@ local function lightStatus()
     return isSpotlightActive
 end
 
-local animations = {
-    { Animation = 'try_trousers_neutral_a', Dictionary = 'mp_clothing@female@trousers' },
-    { Animation = 'bind_pose_180',          Dictionary = 'mp_sleep' },
-    { Animation = 'handsup_base',           Dictionary = 'missminuteman_1ig_2' },
-    { Animation = 'cancel',                 Dictionary = 'cancel' }
-}
-
 local currentAnimationIndex = 1
 
 local function inputListener()
@@ -536,15 +529,15 @@ local function inputListener()
             end
 
             if IsDisabledControlJustPressed(0, 38) then -- E Play Animations
-                local animation = animations[currentAnimationIndex]
+                local animation = Config.Bostra.Animations[currentAnimationIndex]
                 if animation.Dictionary ~= 'cancel' then
                     lib.requestAnimDict(animation.Dictionary, 1500)
                     TaskPlayAnim(cache.ped, animation.Dictionary, animation.Animation, 8.0, 8.0, -1, 1, 0, false, false,
                         false)
-                    currentAnimationIndex = currentAnimationIndex % #animations + 1
+                    currentAnimationIndex = currentAnimationIndex % #Config.Bostra.Animations + 1
                 else
                     ClearPedTasksImmediately(cache.ped)
-                    currentAnimationIndex = currentAnimationIndex % #animations + 1
+                    currentAnimationIndex = currentAnimationIndex % #Config.Bostra.Animations + 1
                 end
             end
 
@@ -571,11 +564,21 @@ local function isDragActive()
     return running
 end
 
+local function showMenu()
+    local isOpen, _ = lib.isTextUIOpen(string.format(_L("bostra.camera")))
+    if not isOpen then
+        lib.showTextUI(string.format(_L("bostra.camera")))
+    else
+        lib.hideTextUI()
+    end
+end
+
 local function startDragCam(entity, radiusOptions)
     if running then
         mouse = true
         return
     end
+    lib.showTextUI(string.format(_L("bostra.camera")))
     mouse, running, gEntity, gRadius, gRadiusMin, gRadiusMax, scrollIncrements, cam = true, true, entity,
         radiusOptions?.initial or 2.0, radiusOptions?.min or 0.35, radiusOptions?.max or 2.0,
         radiusOptions?.scrollIncrements or 0.15, CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
@@ -584,14 +587,6 @@ local function startDragCam(entity, radiusOptions)
     angleZ = (GetEntityHeading(entity) + 90)
     angleY = 0.0
 
-    lib.showTextUI(
-        "[Mouse Wheel ↑  ↓ ]  Zoom In / Out  \n" ..
-        "[L/R Click]  Drag Cam / Char  \n" ..
-        "[Q]  Spotlight  \n" ..
-        "[W/S] Cam Height  \n" ..
-        "[E]  Pose  \n" ..
-        "[ESC] Close Cam UI"
-    )
     lib.disableControls:Add(1, 2, 3, 4, 5, 6, 8, 9, 12, 13, 21, 24, 25, 30, 31, 32, 33, 36, 38, 44, 47, 58, 69, 75, 140,
         141, 142, 143, 200, 202, 257, 263, 264, 322)
     inputListener()
@@ -661,5 +656,6 @@ client = {
     toggleSpotlight = toggleSpotlight,
     isDragActive = isDragActive,
     lightStatus = lightStatus,
-    getMouse = getMouse
+    getMouse = getMouse,
+    showMenu = showMenu,
 }

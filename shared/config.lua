@@ -1137,3 +1137,13 @@ Config.InitialPlayerClothes = {
         }
     }
 }
+
+Config.Bostra = {
+    Animations = {
+        { Animation = 'try_trousers_neutral_a', Dictionary = 'mp_clothing@female@trousers' },
+        { Animation = 'bind_pose_180',          Dictionary = 'mp_sleep' },
+        { Animation = 'handsup_base',           Dictionary = 'missminuteman_1ig_2' },
+        { Animation = 'cancel',                 Dictionary = 'cancel' }
+    }
+    
+}

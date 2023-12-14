@@ -149,21 +149,23 @@ local function ZonesLoop()
         if currentZone then
             sleep = 5
             if IsControlJustReleased(0, 38) then
-                if currentZone.name == "clothingRoom" then
-                    local clothingRoom = Config.ClothingRooms[currentZone.index]
-                    local outfits = GetPlayerJobOutfits(clothingRoom.job)
-                    TriggerEvent("illenium-appearance:client:openJobOutfitsMenu", outfits)
-                elseif currentZone.name == "playerOutfitRoom" then
-                    local outfitRoom = Config.PlayerOutfitRooms[currentZone.index]
-                    OpenOutfitRoom(outfitRoom)
-                elseif currentZone.name == "clothing" then
-                    TriggerEvent("illenium-appearance:client:openClothingShopMenu")
-                elseif currentZone.name == "barber" then
-                    OpenBarberShop()
-                elseif currentZone.name == "tattoo" then
-                    OpenTattooShop()
-                elseif currentZone.name == "surgeon" then
-                    OpenSurgeonShop()
+                if not client.isDragActive() then
+                    if currentZone.name == "clothingRoom" then
+                        local clothingRoom = Config.ClothingRooms[currentZone.index]
+                        local outfits = GetPlayerJobOutfits(clothingRoom.job)
+                        TriggerEvent("illenium-appearance:client:openJobOutfitsMenu", outfits)
+                    elseif currentZone.name == "playerOutfitRoom" then
+                        local outfitRoom = Config.PlayerOutfitRooms[currentZone.index]
+                        OpenOutfitRoom(outfitRoom)
+                    elseif currentZone.name == "clothing" then
+                        TriggerEvent("illenium-appearance:client:openClothingShopMenu")
+                    elseif currentZone.name == "barber" then
+                        OpenBarberShop()
+                    elseif currentZone.name == "tattoo" then
+                        OpenTattooShop()
+                    elseif currentZone.name == "surgeon" then
+                        OpenSurgeonShop()
+                    end
                 end
             end
         end

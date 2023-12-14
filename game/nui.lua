@@ -23,6 +23,7 @@ RegisterNUICallback("appearance_set_camera", function(camera, cb)
     else
         SetNuiFocus(false, false)
         client.getMouse()
+        client.showMenu()
     end
 end)
 
@@ -34,6 +35,7 @@ RegisterNUICallback("appearance_turn_around", function(_, cb)
     else
         SetNuiFocus(false, false)
         client.getMouse()
+        client.showMenu()
     end
 end)
 
@@ -44,6 +46,7 @@ RegisterNUICallback("appearance_rotate_camera", function(direction, cb)
     else
         SetNuiFocus(false, false)
         client.getMouse()
+        client.showMenu()
     end
 end)
 
@@ -168,6 +171,7 @@ RegisterNUICallback("rotate_left", function(_, cb)
     else
         SetNuiFocus(false, false)
         client.getMouse()
+        client.showMenu()
     end
 end)
 
@@ -178,6 +182,7 @@ RegisterNUICallback("rotate_right", function(_, cb)
     else
         SetNuiFocus(false, false)
         client.getMouse()
+        client.showMenu()
     end
 end)
 

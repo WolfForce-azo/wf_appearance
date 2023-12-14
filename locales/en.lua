@@ -272,6 +272,15 @@ Locales["en"] = {
         tattooShopTitle = "Tattoo Shop",
         surgeonShopTitle = "Surgeon Shop"
     },
+    bostra = {
+        camera =         "[Mouse Wheel ↑  ↓ ]  Zoom In / Out  \n" ..
+        "[L/R Click]  Drag Cam / Char  \n" ..
+        "[Q]  Spotlight  \n" ..
+        "[W/S] Cam Height  \n" ..
+        "[E]  Pose  \n" ..
+        "[ESC] Close Cam UI",
+        
+    },
     clothing = {
         title = "Buy Clothing - $%d",
         titleNoPrice = "Change Clothing",
