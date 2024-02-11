@@ -279,7 +279,7 @@ Locales["de"] = {
         "[Q]  Spotlight  \n" ..
         "[W/S] Cam Höhe  \n" ..
         "[E]  Pose  \n" ..
-        "[ESC] Menu schlesißen",
+        "[ESC] Menu schließen",
         
     },
     clothing = {
