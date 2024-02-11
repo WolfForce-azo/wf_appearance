@@ -272,6 +272,16 @@ Locales["de"] = {
         tattooShopTitle = "Tattoo-Shop",
         surgeonShopTitle = "Schönheitschirurg"
     },
+
+    bostra = {
+        camera =         "[Mausrad ↑  ↓ ]  Zoom In / Out  \n" ..
+        "[L/R Klick] Char/Cam bewegen  \n" ..
+        "[Q]  Spotlight  \n" ..
+        "[W/S] Cam Höhe  \n" ..
+        "[E]  Pose  \n" ..
+        "[ESC] Menu schlesißen",
+        
+    },
     clothing = {
         title = "Kleidung kaufen - $%d",
         titleNoPrice = "Kleidung ändern",
